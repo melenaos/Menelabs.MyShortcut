@@ -1,0 +1,1 @@
+# Menelabs.MyShortcut
