@@ -14,5 +14,6 @@ namespace MyShortcut.Library.Services.Abstruct
         IList<ShortcutModel> Shortcuts { get; }
         IList<ShortcutModel> SelectedGroupShortcuts { get; }
 
+        void AddNewShortcut();
     }
 }

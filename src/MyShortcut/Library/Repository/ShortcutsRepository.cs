@@ -10,19 +10,25 @@ namespace MyShortcut.Library.Repository
 {
     public class ShortcutsRepository : IShortcutsRepository
     {
+        private static string ALL_GROUP = "All";
         IList<GroupModel> GroupsTemp = new[]{
-            new GroupModel{ Name = "All", IsAll = true },
+            new GroupModel{ Name = ALL_GROUP, IsAll = true },
             new GroupModel{ Name = "Export" },
             new GroupModel{ Name = "Dev" },
             };
 
-        IList<ShortcutModel> ShortcutsTemp = new[]{
-            new ShortcutModel{ Name = "One", Group  = "Export", Tags="Tag1,tag2", Path ="c:\\temp\\Exe", WorkingDir = null, Type = ShortcutType.Application, Arguments="-a all -b bald"  },
-            new ShortcutModel{ Name = "two", Group  = "Export" },
-            new ShortcutModel{ Name = "three", Group  = "Dev" },
+        IList<ShortcutModel> ShortcutsTemp = new List<ShortcutModel>{
+            new ShortcutModel{ Name = "One", Group  = "Export", Tags="Tag1,tag2", Command ="c:\\temp\\Exe", WorkingDir = null, Type = ShortcutType.Application, Arguments="-a all -b bald"  },
+            new ShortcutModel{ Name = "two", Group  = "Export", Type= ShortcutType.Folder },
+            new ShortcutModel{ Name = "three", Group  = "Dev" , Type= ShortcutType.Plugin},
             };
         public IList<GroupModel> Groups => GroupsTemp;
 
         public IList<ShortcutModel> Shortcuts => ShortcutsTemp;
+
+        public void AddShortcut(ShortcutModel shortcutModel)
+        {
+            ShortcutsTemp.Add(shortcutModel);
+        }
     }
 }

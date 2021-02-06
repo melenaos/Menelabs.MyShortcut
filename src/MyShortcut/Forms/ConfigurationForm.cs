@@ -14,7 +14,7 @@ namespace MyShortcut.Forms
 {
     public partial class ConfigurationForm : Form
     {
-        private Guid? shortcutEditId = null;
+        private ShortcutModel shortcutEdit = null;
 
         private readonly IServiceConfiguration configService;
         public ConfigurationForm(IServiceConfiguration configService)
@@ -50,6 +50,35 @@ namespace MyShortcut.Forms
             ShortcutsViewPanel.Visible = !edit;
             ShortcutsEditPanel.Visible = edit;
 
+            // Clear edit shortcut
+            if (!edit)
+            {
+                shortcutEdit = null;
+            }
+            // fill the data in the textboxes
+            else if (shortcutEdit != null)
+            {
+                DataBindShortcut(true);
+            }
+
+        }
+
+        private void DataBindShortcut(bool load)
+        {
+            if (load)
+            {
+                ShortcutNameText.Text = shortcutEdit.Name;
+                ShortcutAlternativeNamesText.Text = shortcutEdit.AlternativeNames;
+
+                ShortcutGroupCombo.DataSource = configService.Groups.Select(u => u.Name).ToArray();
+                ShortcutGroupCombo.SelectedItem = shortcutEdit.Group;
+
+                ShorcutTypeTabControl.SelectedIndex = (int)shortcutEdit.Type;
+            }
+            else
+            {
+
+            }
         }
 
         private void LoadShortcuts()
@@ -58,7 +87,7 @@ namespace MyShortcut.Forms
             GroupsCombo.DataSource = configService.Groups;
             GroupsCombo.SelectedItem = configService.SelectedGroup;
 
-            ShortcutsDataGrid.DataSource = configService.SelectedGroupShortcuts;
+            UpdateShortcutsDataGrid();
         }
 
         private void InitializeShortcutsLayout()
@@ -75,11 +104,77 @@ namespace MyShortcut.Forms
             if (e.RowIndex < 0)
                 return;
 
-            //I suposed you want to handle the event for column at index 1
+            // If the user pressed on the edit column
             if (e.ColumnIndex >= 0 && e.ColumnIndex < ShortcutsDataGrid.Columns.Count)
             {
                 if (ShortcutsDataGrid.Columns[e.ColumnIndex].Name == "ColEdit")
-                    MessageBox.Show("Clicked!");
+                {
+                    // Get the Shortcut and edit it
+                    if (ShortcutsDataGrid.Rows[e.RowIndex].DataBoundItem is ShortcutModel currentShortcut)
+                    {
+                        shortcutEdit = currentShortcut;
+                        SetShortcutLayout(true);
+                    }
+                }
+            }
+        }
+        private void GroupsCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (GroupsCombo.SelectedItem is GroupModel group)
+            {
+                configService.SelectedGroup = group;
+                UpdateShortcutsDataGrid();
+            }
+        }
+
+        private void UpdateShortcutsDataGrid()
+        {
+            ShortcutsDataGrid.DataSource = configService.SelectedGroupShortcuts;
+
+            // Hide Group column if specific group is selected
+            ShortcutsDataGrid.Columns[0].Visible = configService.SelectedGroup.IsAll;
+
+            ShortcutsDataGrid.Update();
+            ShortcutsDataGrid.Refresh();
+        }
+
+        private void NewShortcutButton_Click(object sender, EventArgs e)
+        {
+            configService.AddNewShortcut();
+            UpdateShortcutsDataGrid();
+
+        }
+        private void SaveShortcutButton_Click(object sender, EventArgs e)
+        {
+
+            SetShortcutLayout(false);
+        }
+
+        private void CancelShortcutButton_Click(object sender, EventArgs e)
+        {
+            SetShortcutLayout(false);
+        }
+
+        private void ShortcutApplicationPathButton_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ShortcutApplicationPathText.Text))
+            {
+                OpenFile.FileName = ShortcutApplicationPathText.Text;
+            }
+            if (OpenFile.ShowDialog() == DialogResult.OK)
+            {
+                ShortcutApplicationPathText.Text = OpenFile.FileName;
+            }
+        }
+        private void ShortcutApplicationWorkingDirectoryButton_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ShortcutApplicationWorkingDirectoryText.Text))
+            {
+                FolderBrowser.SelectedPath= ShortcutApplicationWorkingDirectoryText.Text;
+            }
+            if (FolderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                ShortcutApplicationWorkingDirectoryText.Text = FolderBrowser.SelectedPath;
             }
         }
         #endregion
@@ -93,6 +188,6 @@ namespace MyShortcut.Forms
         {
         }
 
-
+     
     }
 }

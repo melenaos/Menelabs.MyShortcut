@@ -11,5 +11,7 @@ namespace MyShortcut.Library.Repository.Abstruct
     {
         IList<GroupModel> Groups { get; }
         IList<ShortcutModel> Shortcuts { get; }
+
+        void AddShortcut(ShortcutModel shortcutModel);
     }
 }

@@ -61,9 +61,23 @@ namespace MyShortcut
         {
             ConfigurationForm frm = new ConfigurationForm(configService);
             // Show the form while the user edits the settins
-            formFader.PauseFading();
+            PauseFading(true);
             frm.ShowDialog();
-            formFader.ResumeFading();
+            PauseFading(false);
+        }
+
+        private void PauseFading(bool pause)
+        {
+            if (pause)
+            {
+                formFader.PauseFading();
+                TopMost = false;
+            }
+            else
+            {
+                formFader.ResumeFading();
+                TopMost = true;
+            }
         }
     }
 }

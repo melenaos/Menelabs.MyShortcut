@@ -12,19 +12,19 @@ namespace MyShortcut.Library.Services
     public class ConfigurationService : IServiceConfiguration
     {
 
-        private readonly IShortcutsRepository groupRepo;
+        private readonly IShortcutsRepository shortcutRepo;
         public ConfigurationService(IShortcutsRepository groupRepo)
         {
-            this.groupRepo = groupRepo;
+            this.shortcutRepo = groupRepo;
             InitializeGroup();
         }
 
-        public IList<GroupModel> Groups => groupRepo.Groups;
+        public IList<GroupModel> Groups => shortcutRepo.Groups;
 
         public GroupModel _SelectedGroup;
         public GroupModel SelectedGroup { get { return _SelectedGroup; } set { _SelectedGroup = value; UpdateSelectedGroupShortcuts(); } }
 
-        public IList<ShortcutModel> Shortcuts => groupRepo.Shortcuts;
+        public IList<ShortcutModel> Shortcuts => shortcutRepo.Shortcuts;
         public IList<ShortcutModel> SelectedGroupShortcuts { get; private set; }
 
         private void InitializeGroup()
@@ -46,7 +46,9 @@ namespace MyShortcut.Library.Services
         {
             if (SelectedGroup.IsAll)
             {
-                SelectedGroupShortcuts = Shortcuts;
+                // Use a new list because the databinding of DataGridView doesn't get triggered otherwise.
+                //  Alternative you could just assign the Shortcut directly to SelectedGroupShortcuts
+                SelectedGroupShortcuts = new List<ShortcutModel>(Shortcuts);
             }
             else
             {
@@ -61,6 +63,16 @@ namespace MyShortcut.Library.Services
                 }
                 SelectedGroupShortcuts = groupShortcuts;
             }
+        }
+
+        public void AddNewShortcut()
+        {
+            var shortcut = new ShortcutModel
+            {
+                Group = SelectedGroup.Name
+            };
+            shortcutRepo.AddShortcut(shortcut);
+            UpdateSelectedGroupShortcuts();
         }
     }
 }
