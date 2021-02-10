@@ -9,12 +9,16 @@ namespace MyShortcut.Library.Repository.Model
     public enum ShortcutType { Application, Folder, Plugin }
     public class ShortcutModel
     {
+        private static char[] SPLITTING_CHARS = new[] { ',', ';' };
         public string Group { get; set; }
         public string Name { get; set; }
+        public string Tags { get; set; }
         /// <summary>
         /// Alternative calls seperated with , or ;
         /// </summary>
         public string AlternativeNames { get; set; }
+
+
         public ShortcutType Type { get; set; }
 
         /// <summary>
@@ -34,8 +38,11 @@ namespace MyShortcut.Library.Repository.Model
         /// </summary>
         public string WorkingDir { get; set; }
 
+        /// <summary>
+        /// Application: Elevate to admin before execution
+        /// </summary>
         public bool AdminRights { get; set; }
-        public string Tags { get; set; }
+
 
         public string Action
         {
@@ -44,5 +51,9 @@ namespace MyShortcut.Library.Repository.Model
                 return Command + " " + Arguments;
             }
         }
+
+        public string[] TagsList { get { return Tags.Split(SPLITTING_CHARS); } }
+        public string[] AlternativeNamesList { get { return AlternativeNames.Split(SPLITTING_CHARS); } }
+
     }
 }

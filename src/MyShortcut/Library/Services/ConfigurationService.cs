@@ -16,7 +16,7 @@ namespace MyShortcut.Library.Services
         public ConfigurationService(IShortcutsRepository groupRepo)
         {
             this.shortcutRepo = groupRepo;
-            InitializeGroup();
+            SelectAllGroup();
         }
 
         public IList<GroupModel> Groups => shortcutRepo.Groups;
@@ -27,7 +27,7 @@ namespace MyShortcut.Library.Services
         public IList<ShortcutModel> Shortcuts => shortcutRepo.Shortcuts;
         public IList<ShortcutModel> SelectedGroupShortcuts { get; private set; }
 
-        private void InitializeGroup()
+        private void SelectAllGroup()
         {
             // Select group 'All'
             foreach (var group in Groups)
@@ -65,7 +65,82 @@ namespace MyShortcut.Library.Services
             }
         }
 
-        public void AddNewShortcut()
+        public GroupModel AddNewGroup()
+        {
+            var group = new GroupModel();
+            shortcutRepo.AddGroup(group);
+            SelectedGroup = group;
+            UpdateSelectedGroupShortcuts();
+            return group;
+        }
+
+        public void DeleteSelectedGroup()
+        {
+            // Don't delete the All group
+            if (SelectedGroup.IsAll)
+                return;
+
+            // Update the shortcut's group name
+            foreach (var shortcut in Shortcuts)
+            {
+                if (shortcut.Group.Equals(SelectedGroup.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    shortcutRepo.AssignToAllGroup(shortcut);
+                }
+            }
+            var groupToBeDeleted = SelectedGroup;
+
+            SelectAllGroup();
+            shortcutRepo.DeleteGroup(groupToBeDeleted);
+
+            SaveShortcuts();
+        }
+        public ShortcutModel FindShortcut(string text)
+        {
+            foreach (var shortcut in Shortcuts)
+            {
+                var keyword = text.Split(':').Last().Trim();
+
+                // If searched by name or alternative names
+                if (string.Compare(shortcut.Name, keyword, true) == 0 ||
+                     shortcut.AlternativeNamesList.Any(u => string.Compare(u.Trim(), keyword, true) == 0))
+                {
+                    return shortcut;
+                }
+            }
+
+            return null;
+        }
+
+
+        public void UpdateSelectedGroupName(string name)
+        {
+            // Don't update the All group
+            if (SelectedGroup.IsAll)
+                return;
+
+            if (string.IsNullOrEmpty(name))
+                return;
+
+            // Update the shortcut's group name
+            foreach (var shortcut in Shortcuts)
+            {
+                if (shortcut.Group.Equals(SelectedGroup.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    shortcut.Group = name;
+                }
+            }
+
+            // Update group
+            SelectedGroup.Name = name;
+
+            SaveShortcuts();
+        }
+
+
+
+
+        public ShortcutModel AddNewShortcut()
         {
             var shortcut = new ShortcutModel
             {
@@ -73,6 +148,17 @@ namespace MyShortcut.Library.Services
             };
             shortcutRepo.AddShortcut(shortcut);
             UpdateSelectedGroupShortcuts();
+            return shortcut;
+        }
+
+        public void SaveShortcuts()
+        {
+            shortcutRepo.SaveShortcuts();
+        }
+
+        public void LoadShortcuts()
+        {
+            shortcutRepo.LoadShortcuts();
         }
     }
 }

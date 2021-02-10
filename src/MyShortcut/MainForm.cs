@@ -1,5 +1,6 @@
 ﻿using MyShortcut.FormModifications;
 using MyShortcut.Forms;
+using MyShortcut.Library.Repository.Model;
 using MyShortcut.Library.Services;
 using MyShortcut.Library.Services.Abstruct;
 using MyShortcut.Services;
@@ -20,12 +21,17 @@ namespace MyShortcut
         private static int MARGIN_SIZE = 6;
         private readonly FormFader formFader;
         private readonly IServiceConfiguration configService;
+        private readonly IExecuteShortcuts shortcutExecutor;
+        AutoCompleteStringCollection autoCompleteSource = new AutoCompleteStringCollection();
+
+
         public MainForm()
         {
             InitializeComponent();
 
             formFader = new FormFader(this);
             configService = ConfigurationManager.GetConfigurationService();
+            shortcutExecutor = ConfigurationManager.GetShortcutExecutor();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -33,6 +39,7 @@ namespace MyShortcut
             base.OnLoad(e);
             InitializeFormSize();
             formFader.Initialize();
+            BindAutoComplete();
         }
 
         private void InitializeFormSize()
@@ -57,6 +64,28 @@ namespace MyShortcut
             Close();
         }
 
+        private void BindAutoComplete()
+        {
+            configService.LoadShortcuts();
+            foreach (var item in configService.Shortcuts)
+            {
+                autoCompleteSource.Add(item.Name);
+                foreach (var tags in item.TagsList)
+                {
+                    autoCompleteSource.Add(tags.Trim() + " : " + item.Name);
+                }
+
+                foreach (var alternative in item.AlternativeNamesList)
+                {
+                    autoCompleteSource.Add(alternative);
+                }
+            }
+
+            UserCommandTextBox.AutoCompleteCustomSource = autoCompleteSource;
+            UserCommandTextBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            UserCommandTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        }
+
         private void ConfigurationButton_Click(object sender, EventArgs e)
         {
             ConfigurationForm frm = new ConfigurationForm(configService);
@@ -64,6 +93,9 @@ namespace MyShortcut
             PauseFading(true);
             frm.ShowDialog();
             PauseFading(false);
+
+            // Reload shortcuts
+            BindAutoComplete();
         }
 
         private void PauseFading(bool pause)
@@ -77,6 +109,26 @@ namespace MyShortcut
             {
                 formFader.ResumeFading();
                 TopMost = true;
+            }
+        }
+
+        private void UserCommandTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 13)
+            {
+                ShortcutModel shortcut = configService.FindShortcut(UserCommandTextBox.Text);
+                if (shortcut != null)
+                {
+                    if (shortcutExecutor.Execute(shortcut) == false)
+                    {
+                        MessageBox.Show("The Process cannot be started", "Shortcut exception");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The shortcut does not exists", "Shortcut not found");
+                }
+
             }
         }
     }

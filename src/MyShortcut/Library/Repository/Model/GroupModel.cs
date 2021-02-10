@@ -8,7 +8,6 @@ namespace MyShortcut.Library.Repository.Model
 {
     public class GroupModel
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
 
         /// <summary>

@@ -16,6 +16,10 @@ namespace MyShortcut.Forms
     {
         private ShortcutModel shortcutEdit = null;
 
+        private bool manageGroupOpened = false;
+        private int manageGroupPanelHeightClosed = 50;
+        private int manageGroupPanelHeightOpened = 82;
+
         private readonly IServiceConfiguration configService;
         public ConfigurationForm(IServiceConfiguration configService)
         {
@@ -31,6 +35,18 @@ namespace MyShortcut.Forms
             InitializeConfiguration();
         }
 
+        private void InitializeLayout()
+        {
+            this.Size = new Size(500, 350);
+            InitializeShortcutsLayout();
+            InitializeGroupsLayout();
+        }
+
+        private void InitializeGroupsLayout()
+        {
+            GroupsBox.Height = manageGroupPanelHeightClosed;
+        }
+
         private void InitializeConfiguration()
         {
             LoadShortcuts();
@@ -38,10 +54,7 @@ namespace MyShortcut.Forms
             LoadSettings();
         }
 
-        private void InitializeLayout()
-        {
-            InitializeShortcutsLayout();
-        }
+
 
 
         #region Shortcuts
@@ -69,25 +82,80 @@ namespace MyShortcut.Forms
             {
                 ShortcutNameText.Text = shortcutEdit.Name;
                 ShortcutAlternativeNamesText.Text = shortcutEdit.AlternativeNames;
+                ShortcutTagsText.Text = shortcutEdit.Tags;
 
                 ShortcutGroupCombo.DataSource = configService.Groups.Select(u => u.Name).ToArray();
                 ShortcutGroupCombo.SelectedItem = shortcutEdit.Group;
 
                 ShorcutTypeTabControl.SelectedIndex = (int)shortcutEdit.Type;
+                switch (shortcutEdit.Type)
+                {
+                    case ShortcutType.Application:
+                        ShortcutApplicationPathText.Text = shortcutEdit.Command;
+                        ShortcutApplicationWorkingDirectoryText.Text = shortcutEdit.WorkingDir;
+                        ShortcutApplicationArgumentsText.Text = shortcutEdit.Arguments;
+                        ShortcutApplicationAdminCheckbox.Checked = shortcutEdit.AdminRights;
+                        break;
+                    case ShortcutType.Folder:
+                        ShortcutFolderPathText.Text = shortcutEdit.Command;
+                        break;
+                    case ShortcutType.Plugin:
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
+                shortcutEdit.Name = ShortcutNameText.Text;
+                shortcutEdit.AlternativeNames = ShortcutAlternativeNamesText.Text;
+                shortcutEdit.Tags = ShortcutTagsText.Text;
 
+                shortcutEdit.Group = ShortcutGroupCombo.SelectedItem as string;
+
+                shortcutEdit.Type = (ShortcutType)ShorcutTypeTabControl.SelectedIndex;
+                switch (shortcutEdit.Type)
+                {
+                    case ShortcutType.Application:
+                        shortcutEdit.Command = ShortcutApplicationPathText.Text;
+                        shortcutEdit.WorkingDir = ShortcutApplicationWorkingDirectoryText.Text;
+                        shortcutEdit.Arguments = ShortcutApplicationArgumentsText.Text;
+                        shortcutEdit.AdminRights = ShortcutApplicationAdminCheckbox.Checked;
+                        break;
+                    case ShortcutType.Folder:
+                        shortcutEdit.Command = ShortcutFolderPathText.Text;
+                        break;
+                    case ShortcutType.Plugin:
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
         private void LoadShortcuts()
         {
+            configService.LoadShortcuts();
+            UpdateShortcuts();
+        }
 
-            GroupsCombo.DataSource = configService.Groups;
-            GroupsCombo.SelectedItem = configService.SelectedGroup;
-
+        private void UpdateShortcuts()
+        {
+            UpdateGroupsCombo();
             UpdateShortcutsDataGrid();
+        }
+
+        private void UpdateGroupsCombo()
+        {
+            // Store temporary the selected group because it will change when the datasource been reseted
+            var selectedGroup = configService.SelectedGroup;
+
+            GroupsCombo.DataSource = null;
+            GroupsCombo.DataSource = configService.Groups;
+            GroupsCombo.DisplayMember = "Name";
+
+            configService.SelectedGroup = selectedGroup ?? configService.SelectedGroup;
+            GroupsCombo.SelectedItem = configService.SelectedGroup;
         }
 
         private void InitializeShortcutsLayout()
@@ -97,6 +165,22 @@ namespace MyShortcut.Forms
             ShortcutsViewPanel.Dock = DockStyle.Fill;
 
             SetShortcutLayout(false);
+        }
+
+        private void ShortcutsDataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            if (e.ColumnIndex >= 0 && e.ColumnIndex < ShortcutsDataGrid.Columns.Count)
+            {
+                // Get the Shortcut and edit it
+                if (ShortcutsDataGrid.Rows[e.RowIndex].DataBoundItem is ShortcutModel currentShortcut)
+                {
+                    shortcutEdit = currentShortcut;
+                    SetShortcutLayout(true);
+                }
+            }
         }
 
         private void ShortcutsDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -124,6 +208,7 @@ namespace MyShortcut.Forms
             {
                 configService.SelectedGroup = group;
                 UpdateShortcutsDataGrid();
+                ShortcutsEditGroupButton.Enabled = !configService.SelectedGroup.IsAll;
             }
         }
 
@@ -140,13 +225,15 @@ namespace MyShortcut.Forms
 
         private void NewShortcutButton_Click(object sender, EventArgs e)
         {
-            configService.AddNewShortcut();
+            shortcutEdit = configService.AddNewShortcut();
             UpdateShortcutsDataGrid();
+            SetShortcutLayout(true);
 
         }
         private void SaveShortcutButton_Click(object sender, EventArgs e)
         {
-
+            DataBindShortcut(false);
+            configService.SaveShortcuts();
             SetShortcutLayout(false);
         }
 
@@ -170,15 +257,79 @@ namespace MyShortcut.Forms
         {
             if (!string.IsNullOrEmpty(ShortcutApplicationWorkingDirectoryText.Text))
             {
-                FolderBrowser.SelectedPath= ShortcutApplicationWorkingDirectoryText.Text;
+                FolderBrowser.SelectedPath = ShortcutApplicationWorkingDirectoryText.Text;
             }
             if (FolderBrowser.ShowDialog() == DialogResult.OK)
             {
                 ShortcutApplicationWorkingDirectoryText.Text = FolderBrowser.SelectedPath;
             }
         }
+
+        private void ShortcutFolderPathButton_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ShortcutFolderPathText.Text))
+            {
+                FolderBrowser.SelectedPath = ShortcutFolderPathText.Text;
+            }
+            if (FolderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                ShortcutFolderPathText.Text = FolderBrowser.SelectedPath;
+            }
+        }
+
+
+        #region Groups
+        private void ShortcutsNewGroupButton_Click(object sender, EventArgs e)
+        {
+            configService.AddNewGroup();
+            UpdateShortcuts();
+            //Edit new group's name
+            ShortcutsEditGroupButton_Click(sender, e);
+        }
+
+        private void ShortcutsEditGroupButton_Click(object sender, EventArgs e)
+        {
+            // Don't allow to change or delete All group
+            if (configService.SelectedGroup.IsAll)
+                return;
+
+            EditGroupForm form = new EditGroupForm(configService.SelectedGroup.Name);
+            var dialogResult = form.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                configService.UpdateSelectedGroupName(form.GroupNameText.Text);
+                UpdateShortcuts();
+            }
+            else if (dialogResult == DialogResult.Abort)
+            {
+                if (MessageBox.Show($"Are you sure you want to delete group {configService.SelectedGroup.Name}? All group's shortcuts will be transferd to `All` group.", "Delete group", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    configService.DeleteSelectedGroup();
+                    UpdateShortcuts();
+                }
+            }
+        }
+
+        private void ManageGroupsButton_Click(object sender, EventArgs e)
+        {
+            manageGroupOpened = !manageGroupOpened;
+            ManageGroupsButton.Text = manageGroupOpened ? "Manage groups ▲" : "Manage groups ▼";
+            GroupsBox.Height = manageGroupOpened ? manageGroupPanelHeightOpened : manageGroupPanelHeightClosed;
+        }
         #endregion
 
+
+        #endregion
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         private void LoadSettings()
         {
@@ -186,8 +337,12 @@ namespace MyShortcut.Forms
 
         private void LoadPlugins()
         {
+            // Currently there are no plugins supported
+            ConfigurationTabControl.TabPages.Remove(PluginsPage);
+            ShorcutTypeTabControl.TabPages.Remove(ShortcutTypePluginPage);
         }
 
-     
+
+
     }
 }

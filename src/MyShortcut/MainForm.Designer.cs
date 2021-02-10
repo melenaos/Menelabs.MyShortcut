@@ -39,12 +39,13 @@ namespace MyShortcut
             // 
             this.UserCommandTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.UserCommandTextBox.Font = new System.Drawing.Font("Microsoft YaHei", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UserCommandTextBox.Location = new System.Drawing.Point(4, 4);
+            this.UserCommandTextBox.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserCommandTextBox.Location = new System.Drawing.Point(4, 5);
             this.UserCommandTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.UserCommandTextBox.Name = "UserCommandTextBox";
-            this.UserCommandTextBox.Size = new System.Drawing.Size(239, 38);
+            this.UserCommandTextBox.Size = new System.Drawing.Size(239, 34);
             this.UserCommandTextBox.TabIndex = 3;
+            this.UserCommandTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UserCommandTextBox_KeyDown);
             // 
             // ShutDownButton
             // 

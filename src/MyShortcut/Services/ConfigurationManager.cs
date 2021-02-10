@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyShortcut.Services
 {
@@ -13,8 +14,13 @@ namespace MyShortcut.Services
     {
         public static IServiceConfiguration GetConfigurationService()
         {
+               var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\MyShortcuts";
+            return new ConfigurationService(new ShortcutsRepository(path));
+        }
 
-            return new ConfigurationService(new ShortcutsRepository());
+        public static IExecuteShortcuts GetShortcutExecutor()
+        {
+            return new ShortcutExecutor();
         }
     }
 }

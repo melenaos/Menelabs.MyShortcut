@@ -9,9 +9,16 @@ namespace MyShortcut.Library.Repository.Abstruct
 {
     public interface IShortcutsRepository
     {
-        IList<GroupModel> Groups { get; }
-        IList<ShortcutModel> Shortcuts { get; }
+        List<GroupModel> Groups { get; }
+        List<ShortcutModel> Shortcuts { get; }
 
         void AddShortcut(ShortcutModel shortcutModel);
+        void AddGroup(GroupModel group);
+
+        void AssignToAllGroup(ShortcutModel shortcutModel);
+
+        void LoadShortcuts();
+        void SaveShortcuts();
+        void DeleteGroup(GroupModel groupToBeDeleted);
     }
 }
