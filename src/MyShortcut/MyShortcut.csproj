@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormModifications\FormFader.cs" />
+    <Compile Include="FormModifications\MovingForm.cs" />
     <Compile Include="Forms\ConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,7 +64,10 @@
     <Compile Include="Forms\EditGroupForm.Designer.cs">
       <DependentUpon>EditGroupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Library\Repository\Abstruct\ISettingsRepository.cs" />
     <Compile Include="Library\Repository\Abstruct\IShortcutsRepository.cs" />
+    <Compile Include="Library\Repository\Model\SettingsModel.cs" />
+    <Compile Include="Library\Repository\SettingsRepository.cs" />
     <Compile Include="Library\Repository\ShortcutsRepository.cs" />
     <Compile Include="Library\Repository\Model\GroupModel.cs" />
     <Compile Include="Library\Repository\Model\ShortcutModel.cs" />

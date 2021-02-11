@@ -3,6 +3,7 @@ using MyShortcut.Library.Repository.Model;
 using MyShortcut.Library.Services.Abstruct;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,11 @@ namespace MyShortcut.Library.Services
     {
 
         private readonly IShortcutsRepository shortcutRepo;
-        public ConfigurationService(IShortcutsRepository groupRepo)
+        private readonly ISettingsRepository settingsRepo;
+        public ConfigurationService(IShortcutsRepository shortcutsRepo, ISettingsRepository settingsRepo)
         {
-            this.shortcutRepo = groupRepo;
+            this.shortcutRepo = shortcutsRepo;
+            this.settingsRepo = settingsRepo;
             SelectAllGroup();
         }
 
@@ -26,6 +29,22 @@ namespace MyShortcut.Library.Services
 
         public IList<ShortcutModel> Shortcuts => shortcutRepo.Shortcuts;
         public IList<ShortcutModel> SelectedGroupShortcuts { get; private set; }
+
+        public Point? GetFormLocation()
+        {
+            return settingsRepo.GetFormLocation();
+        }
+
+        /// <summary>
+        /// Set formlocation settings and save settings
+        /// </summary>
+        /// <param name="location"></param>
+        public void SetFormLocation(Point location)
+        {
+            settingsRepo.SetFormLocation(location);
+            SaveSettings();
+        }
+
 
         private void SelectAllGroup()
         {
@@ -160,5 +179,17 @@ namespace MyShortcut.Library.Services
         {
             shortcutRepo.LoadShortcuts();
         }
+
+        public void SaveSettings()
+        {
+            settingsRepo.SaveSettings();
+        }
+
+        public void LoadSettings()
+        {
+            settingsRepo.LoadSettings();
+        }
+
+
     }
 }

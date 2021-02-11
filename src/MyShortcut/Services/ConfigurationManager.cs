@@ -15,7 +15,7 @@ namespace MyShortcut.Services
         public static IServiceConfiguration GetConfigurationService()
         {
                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\MyShortcuts";
-            return new ConfigurationService(new ShortcutsRepository(path));
+            return new ConfigurationService(new ShortcutsRepository(path), new SettingsRepository(path));
         }
 
         public static IExecuteShortcuts GetShortcutExecutor()

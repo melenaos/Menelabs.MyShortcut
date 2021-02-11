@@ -1,6 +1,7 @@
 ﻿using MyShortcut.Library.Repository.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,15 @@ namespace MyShortcut.Library.Services.Abstruct
 
         void SaveShortcuts();
         void LoadShortcuts();
+        void SaveSettings();
+        void LoadSettings();
 
         ShortcutModel AddNewShortcut();
         GroupModel AddNewGroup();
         void DeleteSelectedGroup();
         void UpdateSelectedGroupName(string text);
         ShortcutModel FindShortcut(string text);
+        Point? GetFormLocation();
+        void SetFormLocation(Point location);
     }
 }

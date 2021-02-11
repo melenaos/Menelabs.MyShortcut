@@ -20,6 +20,7 @@ namespace MyShortcut
     {
         private static int MARGIN_SIZE = 6;
         private readonly FormFader formFader;
+        private readonly MovingForm movingForm;
         private readonly IServiceConfiguration configService;
         private readonly IExecuteShortcuts shortcutExecutor;
         AutoCompleteStringCollection autoCompleteSource = new AutoCompleteStringCollection();
@@ -30,6 +31,7 @@ namespace MyShortcut
             InitializeComponent();
 
             formFader = new FormFader(this);
+            movingForm = new MovingForm(this);
             configService = ConfigurationManager.GetConfigurationService();
             shortcutExecutor = ConfigurationManager.GetShortcutExecutor();
         }
@@ -37,9 +39,18 @@ namespace MyShortcut
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            configService.LoadSettings();
             InitializeFormSize();
             formFader.Initialize();
+            movingForm.Initialize(configService.GetFormLocation());
             BindAutoComplete();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var location = movingForm.RecordWindowPosition();
+            if (location.HasValue)
+                configService.SetFormLocation(location.Value);
         }
 
         private void InitializeFormSize()
@@ -119,7 +130,11 @@ namespace MyShortcut
                 ShortcutModel shortcut = configService.FindShortcut(UserCommandTextBox.Text);
                 if (shortcut != null)
                 {
-                    if (shortcutExecutor.Execute(shortcut) == false)
+                    if (shortcutExecutor.Execute(shortcut))
+                    {
+                        UserCommandTextBox.Text = "";
+                    }
+                    else
                     {
                         MessageBox.Show("The Process cannot be started", "Shortcut exception");
                     }
@@ -131,5 +146,7 @@ namespace MyShortcut
 
             }
         }
+
+
     }
 }
