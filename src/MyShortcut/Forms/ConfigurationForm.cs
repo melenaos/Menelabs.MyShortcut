@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -33,6 +35,8 @@ namespace MyShortcut.Forms
             // Initialize Layout before Configuration (AutogenerateColumns = false before adding the datasources)
             InitializeLayout();
             InitializeConfiguration();
+
+            
         }
 
         private void InitializeLayout()
@@ -40,6 +44,13 @@ namespace MyShortcut.Forms
             this.Size = new Size(500, 350);
             InitializeShortcutsLayout();
             InitializeGroupsLayout();
+            InitializeAboutLayout();
+        }
+
+        private void InitializeAboutLayout()
+        {
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+            AboutVersionLabel.Text = $"v{version.Major}.{version.Minor}";
         }
 
         private void InitializeGroupsLayout()
@@ -342,7 +353,22 @@ namespace MyShortcut.Forms
             ShorcutTypeTabControl.TabPages.Remove(ShortcutTypePluginPage);
         }
 
+        private void MenelabsLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo("https://menelabs.com/");
+            Process.Start(sInfo);
+        }
 
+        private void GDrakosLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo("https://github.com/gdrakos79");
+            Process.Start(sInfo);
+        }
 
+        private void GitHubLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo("https://github.com/melenaos/Menelabs.MyShortcut");
+            Process.Start(sInfo);
+        }
     }
 }
