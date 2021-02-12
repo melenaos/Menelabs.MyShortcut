@@ -81,6 +81,10 @@ namespace MyShortcut.Forms
             this.PluginsPage = new System.Windows.Forms.TabPage();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.AboutPage = new System.Windows.Forms.TabPage();
+            this.GitHubLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.AboutLabel5 = new System.Windows.Forms.Label();
+            this.GDrakosLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.AboutLabel4 = new System.Windows.Forms.Label();
             this.MenelabsLinkLabel = new System.Windows.Forms.LinkLabel();
             this.AboutLabel3 = new System.Windows.Forms.Label();
             this.AboutLabel2 = new System.Windows.Forms.Label();
@@ -90,10 +94,6 @@ namespace MyShortcut.Forms
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.GDrakosLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.AboutLabel4 = new System.Windows.Forms.Label();
-            this.AboutLabel5 = new System.Windows.Forms.Label();
-            this.GitHubLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ConfigurationTabControl.SuspendLayout();
             this.ShortcutsPage.SuspendLayout();
             this.ShortcutsEditPanel.SuspendLayout();
@@ -654,6 +654,46 @@ namespace MyShortcut.Forms
             this.AboutPage.Text = "About";
             this.AboutPage.UseVisualStyleBackColor = true;
             // 
+            // GitHubLinkLabel
+            // 
+            this.GitHubLinkLabel.AutoSize = true;
+            this.GitHubLinkLabel.Location = new System.Drawing.Point(243, 234);
+            this.GitHubLinkLabel.Name = "GitHubLinkLabel";
+            this.GitHubLinkLabel.Size = new System.Drawing.Size(52, 17);
+            this.GitHubLinkLabel.TabIndex = 9;
+            this.GitHubLinkLabel.TabStop = true;
+            this.GitHubLinkLabel.Text = "GitHub";
+            this.GitHubLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitHubLinkLabel_LinkClicked);
+            // 
+            // AboutLabel5
+            // 
+            this.AboutLabel5.AutoSize = true;
+            this.AboutLabel5.Location = new System.Drawing.Point(33, 234);
+            this.AboutLabel5.Name = "AboutLabel5";
+            this.AboutLabel5.Size = new System.Drawing.Size(213, 17);
+            this.AboutLabel5.TabIndex = 8;
+            this.AboutLabel5.Text = "Code and versions are hosted in";
+            // 
+            // GDrakosLinkLabel
+            // 
+            this.GDrakosLinkLabel.AutoSize = true;
+            this.GDrakosLinkLabel.Location = new System.Drawing.Point(101, 199);
+            this.GDrakosLinkLabel.Name = "GDrakosLinkLabel";
+            this.GDrakosLinkLabel.Size = new System.Drawing.Size(64, 17);
+            this.GDrakosLinkLabel.TabIndex = 7;
+            this.GDrakosLinkLabel.TabStop = true;
+            this.GDrakosLinkLabel.Text = "GDrakos";
+            this.GDrakosLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GDrakosLinkLabel_LinkClicked);
+            // 
+            // AboutLabel4
+            // 
+            this.AboutLabel4.AutoSize = true;
+            this.AboutLabel4.Location = new System.Drawing.Point(30, 182);
+            this.AboutLabel4.Name = "AboutLabel4";
+            this.AboutLabel4.Size = new System.Drawing.Size(227, 34);
+            this.AboutLabel4.TabIndex = 6;
+            this.AboutLabel4.Text = "The initial idea and implementaion \r\nbelongs to\r\n";
+            // 
             // MenelabsLinkLabel
             // 
             this.MenelabsLinkLabel.AutoSize = true;
@@ -719,46 +759,6 @@ namespace MyShortcut.Forms
             // FolderBrowser
             // 
             this.FolderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            // 
-            // GDrakosLinkLabel
-            // 
-            this.GDrakosLinkLabel.AutoSize = true;
-            this.GDrakosLinkLabel.Location = new System.Drawing.Point(101, 199);
-            this.GDrakosLinkLabel.Name = "GDrakosLinkLabel";
-            this.GDrakosLinkLabel.Size = new System.Drawing.Size(64, 17);
-            this.GDrakosLinkLabel.TabIndex = 7;
-            this.GDrakosLinkLabel.TabStop = true;
-            this.GDrakosLinkLabel.Text = "GDrakos";
-            this.GDrakosLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GDrakosLinkLabel_LinkClicked);
-            // 
-            // AboutLabel4
-            // 
-            this.AboutLabel4.AutoSize = true;
-            this.AboutLabel4.Location = new System.Drawing.Point(30, 182);
-            this.AboutLabel4.Name = "AboutLabel4";
-            this.AboutLabel4.Size = new System.Drawing.Size(227, 34);
-            this.AboutLabel4.TabIndex = 6;
-            this.AboutLabel4.Text = "The initial idea and implementaion \r\nbelongs to\r\n";
-            // 
-            // AboutLabel5
-            // 
-            this.AboutLabel5.AutoSize = true;
-            this.AboutLabel5.Location = new System.Drawing.Point(33, 234);
-            this.AboutLabel5.Name = "AboutLabel5";
-            this.AboutLabel5.Size = new System.Drawing.Size(213, 17);
-            this.AboutLabel5.TabIndex = 8;
-            this.AboutLabel5.Text = "Code and versions are hosted in";
-            // 
-            // GitHubLinkLabel
-            // 
-            this.GitHubLinkLabel.AutoSize = true;
-            this.GitHubLinkLabel.Location = new System.Drawing.Point(243, 234);
-            this.GitHubLinkLabel.Name = "GitHubLinkLabel";
-            this.GitHubLinkLabel.Size = new System.Drawing.Size(52, 17);
-            this.GitHubLinkLabel.TabIndex = 9;
-            this.GitHubLinkLabel.TabStop = true;
-            this.GitHubLinkLabel.Text = "GitHub";
-            this.GitHubLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitHubLinkLabel_LinkClicked);
             // 
             // ConfigurationForm
             // 
