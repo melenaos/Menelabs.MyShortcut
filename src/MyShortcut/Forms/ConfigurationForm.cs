@@ -342,9 +342,8 @@ namespace MyShortcut.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void LoadSettings()
-        {
-        }
+  
+
 
         private void LoadPlugins()
         {
@@ -370,5 +369,30 @@ namespace MyShortcut.Forms
             ProcessStartInfo sInfo = new ProcessStartInfo("https://github.com/melenaos/Menelabs.MyShortcut");
             Process.Start(sInfo);
         }
+
+        #region configuration
+        private void LoadSettings()
+        {
+            configService.LoadSettings();
+            UpdateSettings();
+        }
+
+        private void UpdateSettings()
+        {
+            ShowInTaskbarCheckBox.Checked = configService.ShowInTaskbar;
+            StayOnTopCheckBox.Checked = configService.WindowOnTop;
+        }
+
+        private void StayOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            configService.WindowOnTop = StayOnTopCheckBox.Checked;
+        }
+
+        private void ShowInTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            configService.ShowInTaskbar = ShowInTaskbarCheckBox.Checked;
+
+        }
+        #endregion
     }
 }

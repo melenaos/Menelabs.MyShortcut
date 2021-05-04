@@ -27,5 +27,8 @@ namespace MyShortcut.Library.Services.Abstruct
         ShortcutModel FindShortcut(string text);
         Point? GetFormLocation();
         void SetFormLocation(Point location);
+
+        bool WindowOnTop { get; set; }
+        bool ShowInTaskbar { get; set; }
     }
 }

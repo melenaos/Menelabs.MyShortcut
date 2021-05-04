@@ -100,6 +100,7 @@ namespace MyShortcut
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "[";
             this.TopMost = true;
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -45,6 +45,18 @@ namespace MyShortcut.Library.Services
             SaveSettings();
         }
 
+      
+        public bool WindowOnTop
+        {
+            get{ return settingsRepo.WindowOnTop; }
+            set{ settingsRepo.WindowOnTop = value; SaveSettings(); }
+        }
+
+        public bool ShowInTaskbar
+        {
+            get { return settingsRepo.ShowInTaskbar; }
+            set { settingsRepo.ShowInTaskbar = value; SaveSettings(); }
+        }
 
         private void SelectAllGroup()
         {

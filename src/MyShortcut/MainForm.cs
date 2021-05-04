@@ -40,10 +40,17 @@ namespace MyShortcut
         {
             base.OnLoad(e);
             configService.LoadSettings();
+            InitializeFormSettings();
             InitializeFormSize();
             formFader.Initialize();
             movingForm.Initialize(configService.GetFormLocation());
             BindAutoComplete();
+        }
+
+        private void InitializeFormSettings()
+        {
+            this.ShowInTaskbar = configService.ShowInTaskbar;
+            this.TopMost= configService.WindowOnTop;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -107,6 +114,8 @@ namespace MyShortcut
 
             // Reload shortcuts
             BindAutoComplete();
+            // and initialize formsettings
+            InitializeFormSettings();
         }
 
         private void PauseFading(bool pause)
@@ -147,6 +156,9 @@ namespace MyShortcut
             }
         }
 
-
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            UserCommandTextBox.Focus();
+        }
     }
 }

@@ -94,6 +94,9 @@ namespace MyShortcut.Forms
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.windowSettingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.ShowInTaskbarCheckBox = new System.Windows.Forms.CheckBox();
+            this.StayOnTopCheckBox = new System.Windows.Forms.CheckBox();
             this.ConfigurationTabControl.SuspendLayout();
             this.ShortcutsPage.SuspendLayout();
             this.ShortcutsEditPanel.SuspendLayout();
@@ -105,7 +108,9 @@ namespace MyShortcut.Forms
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShortcutsDataGrid)).BeginInit();
             this.GroupsBox.SuspendLayout();
+            this.SettingsPage.SuspendLayout();
             this.AboutPage.SuspendLayout();
+            this.windowSettingsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // ConfigurationTabControl
@@ -628,6 +633,7 @@ namespace MyShortcut.Forms
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.windowSettingsGroupBox);
             this.SettingsPage.Location = new System.Drawing.Point(4, 25);
             this.SettingsPage.Name = "SettingsPage";
             this.SettingsPage.Size = new System.Drawing.Size(1346, 411);
@@ -760,6 +766,40 @@ namespace MyShortcut.Forms
             // 
             this.FolderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
+            // windowSettingsGroupBox
+            // 
+            this.windowSettingsGroupBox.Controls.Add(this.StayOnTopCheckBox);
+            this.windowSettingsGroupBox.Controls.Add(this.ShowInTaskbarCheckBox);
+            this.windowSettingsGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.windowSettingsGroupBox.Location = new System.Drawing.Point(0, 0);
+            this.windowSettingsGroupBox.Name = "windowSettingsGroupBox";
+            this.windowSettingsGroupBox.Size = new System.Drawing.Size(1346, 78);
+            this.windowSettingsGroupBox.TabIndex = 0;
+            this.windowSettingsGroupBox.TabStop = false;
+            this.windowSettingsGroupBox.Text = "Window Settings";
+            // 
+            // ShowInTaskbarCheckBox
+            // 
+            this.ShowInTaskbarCheckBox.AutoSize = true;
+            this.ShowInTaskbarCheckBox.Location = new System.Drawing.Point(6, 21);
+            this.ShowInTaskbarCheckBox.Name = "ShowTaskbarIconCheckBox";
+            this.ShowInTaskbarCheckBox.Size = new System.Drawing.Size(145, 21);
+            this.ShowInTaskbarCheckBox.TabIndex = 12;
+            this.ShowInTaskbarCheckBox.Text = "Show taskbar icon";
+            this.ShowInTaskbarCheckBox.UseVisualStyleBackColor = true;
+            this.ShowInTaskbarCheckBox.CheckedChanged += new System.EventHandler(this.ShowInTaskbarCheckBox_CheckedChanged);
+            // 
+            // StayOnTopCheckBox
+            // 
+            this.StayOnTopCheckBox.AutoSize = true;
+            this.StayOnTopCheckBox.Location = new System.Drawing.Point(6, 48);
+            this.StayOnTopCheckBox.Name = "StayOnTopCheckBox";
+            this.StayOnTopCheckBox.Size = new System.Drawing.Size(106, 21);
+            this.StayOnTopCheckBox.TabIndex = 13;
+            this.StayOnTopCheckBox.Text = "Stay on  top";
+            this.StayOnTopCheckBox.UseVisualStyleBackColor = true;
+            this.StayOnTopCheckBox.CheckedChanged += new System.EventHandler(this.StayOnTopCheckBox_CheckedChanged);
+            // 
             // ConfigurationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -784,8 +824,11 @@ namespace MyShortcut.Forms
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ShortcutsDataGrid)).EndInit();
             this.GroupsBox.ResumeLayout(false);
+            this.SettingsPage.ResumeLayout(false);
             this.AboutPage.ResumeLayout(false);
             this.AboutPage.PerformLayout();
+            this.windowSettingsGroupBox.ResumeLayout(false);
+            this.windowSettingsGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -855,5 +898,8 @@ namespace MyShortcut.Forms
         private System.Windows.Forms.Label AboutLabel4;
         private System.Windows.Forms.Label AboutLabel5;
         private System.Windows.Forms.LinkLabel GitHubLinkLabel;
+        private System.Windows.Forms.GroupBox windowSettingsGroupBox;
+        private System.Windows.Forms.CheckBox StayOnTopCheckBox;
+        private System.Windows.Forms.CheckBox ShowInTaskbarCheckBox;
     }
 }

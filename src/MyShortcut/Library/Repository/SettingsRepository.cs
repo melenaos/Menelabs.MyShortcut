@@ -25,10 +25,7 @@ namespace MyShortcut.Library.Repository
             settingsFile = path + "Settings.json";
         }
 
-        public Point? GetFormLocation()
-        {
-            return settings.FormLocation;
-        }
+
 
         public void LoadSettings()
         {
@@ -38,7 +35,7 @@ namespace MyShortcut.Library.Repository
                 {
                     var settingsFileContent = File.ReadAllText(settingsFile);
                     settings = JsonConvert.DeserializeObject<SettingsModel>(settingsFileContent);
-                    
+
                 }
                 catch
                 {
@@ -57,9 +54,37 @@ namespace MyShortcut.Library.Repository
             File.WriteAllText(settingsFile, fileContent);
         }
 
+        public Point? GetFormLocation()
+        {
+            return settings.FormLocation;
+        }
         public void SetFormLocation(Point location)
         {
             settings.FormLocation = location;
+        }
+
+        public bool WindowOnTop
+        {
+            get
+            {
+                return settings.WindowOnTop;
+            }
+            set
+            {
+                settings.WindowOnTop = value;
+            }
+        }
+
+        public bool ShowInTaskbar
+        {
+            get
+            {
+                return settings.ShowInTaskbar;
+            }
+            set
+            {
+                settings.ShowInTaskbar = value;
+            }
         }
     }
 }
