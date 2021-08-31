@@ -18,7 +18,7 @@ namespace MyShortcut.Library.Services.Abstruct
         void SaveShortcuts();
         void LoadShortcuts();
         void SaveSettings();
-        void LoadSettings();
+        Task LoadSettings();
 
         ShortcutModel AddNewShortcut();
         GroupModel AddNewGroup();

@@ -9,7 +9,7 @@ namespace MyShortcut.Library.Repository.Abstruct
 {
     public interface ISettingsRepository
     {
-        void LoadSettings();
+        Task LoadSettings();
         void SaveSettings();
         Point? GetFormLocation();
         void SetFormLocation(Point location);

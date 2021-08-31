@@ -36,10 +36,10 @@ namespace MyShortcut
             shortcutExecutor = ConfigurationManager.GetShortcutExecutor();
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            configService.LoadSettings();
+           await configService.LoadSettings();
             InitializeFormSettings();
             InitializeFormSize();
             formFader.Initialize();
@@ -134,7 +134,7 @@ namespace MyShortcut
 
         private void UserCommandTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyValue == 13)
+            if (e.KeyValue == 13 && !string.IsNullOrEmpty(UserCommandTextBox.Text))
             {
                 ShortcutModel shortcut = configService.FindShortcut(UserCommandTextBox.Text);
                 if (shortcut != null)

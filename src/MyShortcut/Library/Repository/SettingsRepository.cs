@@ -27,14 +27,17 @@ namespace MyShortcut.Library.Repository
 
 
 
-        public void LoadSettings()
+        public async Task LoadSettings()
         {
             if (File.Exists(settingsFile))
             {
                 try
                 {
-                    var settingsFileContent = File.ReadAllText(settingsFile);
-                    settings = JsonConvert.DeserializeObject<SettingsModel>(settingsFileContent);
+                    using (var reader = File.OpenText(settingsFile))
+                    {
+                        var settingsFileContent = await reader.ReadToEndAsync();
+                        settings = JsonConvert.DeserializeObject<SettingsModel>(settingsFileContent);
+                    }
 
                 }
                 catch

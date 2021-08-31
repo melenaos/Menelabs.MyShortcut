@@ -197,9 +197,9 @@ namespace MyShortcut.Library.Services
             settingsRepo.SaveSettings();
         }
 
-        public void LoadSettings()
+        public Task LoadSettings()
         {
-            settingsRepo.LoadSettings();
+           return settingsRepo.LoadSettings();
         }
 
 
